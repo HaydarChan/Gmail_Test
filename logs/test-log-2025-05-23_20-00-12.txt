@@ -1,0 +1,6 @@
+[2025-05-23 20:00:12] INFO    - ===== Test: Login to Proton =====
+[2025-05-23 20:00:12] INFO    - Starting login test to Proton Mail
+[2025-05-23 20:00:27] INFO    - Successfully landed in Inbox
+[2025-05-23 20:00:27] INFO    - ===== Test: Verify email presence in Inbox =====
+[2025-05-23 20:00:27] INFO    - Checking that there are at least 5 emails in the inbox...
+[2025-05-23 20:00:28] INFO    - Shutting down WebDriver and closing log file...

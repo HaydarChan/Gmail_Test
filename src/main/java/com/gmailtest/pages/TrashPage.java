@@ -55,7 +55,7 @@ public class TrashPage extends BasePage {
         click(selectAllCheckbox);
 
         Logger.info("Waiting for 'Move to Inbox' button to become clickable...");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(moveToInboxButton));
         
         Logger.info("Clicking 'Move to Inbox'...");
