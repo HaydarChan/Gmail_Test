@@ -2,6 +2,7 @@ package tests;
 
 import com.gmailtest.pages.BasePage;
 import com.gmailtest.pages.LoginPage;
+import com.gmailtest.pages.MailPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterClass;
@@ -11,6 +12,7 @@ public class BaseTest {
     protected WebDriver driver;
     protected BasePage basePage;
     protected LoginPage loginPage;
+    protected MailPage mailPage;
     private String url = "https://account.proton.me/mail";
 
     @BeforeClass
@@ -21,6 +23,7 @@ public class BaseTest {
         basePage = new BasePage();
         basePage.setDriver(driver);
         loginPage = new LoginPage();
+        mailPage = new MailPage();
     }
 
     @AfterClass
