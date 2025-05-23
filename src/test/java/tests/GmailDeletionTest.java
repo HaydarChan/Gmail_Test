@@ -231,7 +231,6 @@ public class GmailDeletionTest extends BaseTest {
     public void testDeleteAndRestoreEmailFromTrashToolbar() {
         Logger.info("===== Test: Delete one email and restore from Trash via toolbar =====");
 
-        // Step 0: Delete one email
         mailPage.goToInbox();
         Assert.assertTrue(mailPage.isAtInbox(), "Not at Inbox page.");
 
@@ -244,17 +243,13 @@ public class GmailDeletionTest extends BaseTest {
         Assert.assertTrue(mailPage.isEmailOpened(targetSubject), "Email not opened.");
         mailPage.deleteOpenedEmail();
 
-        // Step 1: Go to Trash
         mailPage.goToTrash();
         Assert.assertTrue(trashPage.isAtTrash(), "Not at Trash page.");
 
-        // Step 2: Open the email in Trash
         trashPage.openEmailBySubjectInTrash(targetSubject);
 
-        // Step 3: Click toolbar restore
         trashPage.moveOpenedEmailToInboxFromToolbar();
 
-        // Step 4: Verify it's in Inbox
         mailPage.goToInbox();
         List<String> inboxSubjects = mailPage.getAllInboxEmailSubjects();
         Assert.assertTrue(inboxSubjects.contains(targetSubject), "Restored email not found in Inbox.");
