@@ -70,6 +70,33 @@ public class GmailDeletionTest extends BaseTest {
         Logger.info("Email successfully found in Trash.");
     }
 
+    @Test(dependsOnMethods = "testEmailMovedToTrash", description = "Delete two emails using checkbox and verify both appear in Trash")
+    public void testDeleteMultipleEmails() {
+        Logger.info("Navigating back to Inbox...");
+        mailPage.goToInbox();
+        Assert.assertTrue(mailPage.isAtInbox(), "Not at Inbox page.");
+
+        Logger.info("Retrieving inbox email subjects...");
+        List<String> subjects = mailPage.getAllInboxEmailSubjects();
+        Assert.assertTrue(subjects.size() >= 3, "Need at least 3 emails to delete 2 more.");
+
+        List<String> targets = subjects.subList(0, 2);
+        Logger.info("Selected emails for deletion via checkbox: " + targets);
+
+        mailPage.selectFirstNEmailsAndDelete(2);
+
+        Logger.info("Navigating to Trash...");
+        mailPage.goToTrash();
+        Assert.assertTrue(trashPage.isAtTrash(), "Failed to navigate to Trash.");
+
+        for (String subj : targets) {
+            Logger.info("Verifying presence in Trash: " + subj);
+            Assert.assertTrue(trashPage.isEmailInTrash(subj), "Email not found in Trash: " + subj);
+        }
+
+        Logger.info("Successfully deleted and verified 2 emails in Trash.");
+    }
+
     private boolean retry(Check check, int attempts) {
         for (int i = 0; i < attempts; i++) {
             if (check.run()) return true;

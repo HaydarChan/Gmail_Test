@@ -15,6 +15,9 @@ public class MailPage extends BasePage {
     private final By trashNavButton = By.cssSelector("a[data-testid='navigation-link:trash']");
     private final By deleteButton = By.cssSelector("button[data-testid='message-header-expanded:move-to-trash']");
     private final By moreButton = By.cssSelector("button[title='More'][data-shortcut-target='toggle-more-items']");
+    private final By inboxNavButton = By.cssSelector("a[data-testid='navigation-link:inbox']");
+    private final By bulkDeleteButton = By.cssSelector("button[data-testid='toolbar:movetotrash']");
+    private final By emailCheckboxes = By.cssSelector("input[data-testid='item-checkbox']");
 
     public boolean isAtInbox() {
         try {
@@ -88,5 +91,29 @@ public class MailPage extends BasePage {
 
         wait.until(ExpectedConditions.elementToBeClickable(trashNavButton));
         click(trashNavButton);
+    }
+
+    public void goToInbox() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(inboxNavButton));
+        click(inboxNavButton);
+    }
+
+    public void selectFirstNEmailsAndDelete(int count) {
+        Logger.info("Selecting first " + count + " emails via checkbox...");
+        List<WebElement> checkboxes = driver.findElements(emailCheckboxes);
+
+        if (checkboxes.size() < count) {
+            throw new IllegalStateException("Only " + checkboxes.size() + " emails found. Need at least " + count);
+        }
+
+        for (int i = 0; i < count; i++) {
+            checkboxes.get(i).click();
+        }
+
+        Logger.info("Waiting for bulk delete button to be clickable...");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(bulkDeleteButton)).click();
+        Logger.info("Clicked 'Move to trash' toolbar button.");
     }
 }
