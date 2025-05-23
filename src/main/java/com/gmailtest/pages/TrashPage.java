@@ -85,6 +85,14 @@ public class TrashPage extends BasePage {
         Logger.info("Clicking 'Delete permanently' from detail view...");
         click(toolbarDeletePermanentlyButton);
 
+        
+        try {
+            Logger.info("Waiting 2 second before confirming permanent delete...");
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         Logger.info("Confirming permanent delete...");
         click(confirmPermanentDeleteButton);
     }
