@@ -18,10 +18,13 @@ public class MailPage extends BasePage {
     private final By inboxNavButton = By.cssSelector("a[data-testid='navigation-link:inbox']");
     private final By bulkDeleteButton = By.cssSelector("button[data-testid='toolbar:movetotrash']");
     private final By emailCheckboxes = By.cssSelector("input[data-testid='item-checkbox']");
+    private final By selectAllInboxCheckbox = By.cssSelector("input#idSelectAll[data-testid='toolbar:select-all-checkbox']");
+    private final By moveToTrashButton = By.cssSelector("button[data-testid='toolbar:movetotrash']");
+
 
     public boolean isAtInbox() {
         try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
             wait.until(driver -> {
                 try {
                     WebElement header = find(inboxHeader);
@@ -115,5 +118,13 @@ public class MailPage extends BasePage {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(bulkDeleteButton)).click();
         Logger.info("Clicked 'Move to trash' toolbar button.");
+    }
+
+    public void moveAllInboxEmailsToTrash() {
+        Logger.info("Selecting all emails in Inbox...");
+        click(selectAllInboxCheckbox);
+
+        Logger.info("Clicking 'Move to Trash'...");
+        click(moveToTrashButton);
     }
 }
