@@ -257,6 +257,42 @@ public class GmailDeletionTest extends BaseTest {
         Logger.info("Email successfully restored to Inbox from Trash detail view.");
     }
 
+    /* 
+        Test: Delete 1 email, open it in Trash, and permanently delete it from the detail view 
+    */
+    @Test(dependsOnMethods = "testDeleteAndRestoreEmailFromTrashToolbar", description = "Permanently delete 1 email from Trash via detail view")
+    public void testDeleteEmailPermanentlyFromDetailView() {
+        Logger.info("===== Test: Permanently delete email from Trash detail view =====");
+
+        mailPage.goToInbox();
+        Assert.assertTrue(mailPage.isAtInbox(), "Not at Inbox page.");
+
+        List<String> inboxSubjects = mailPage.getAllInboxEmailSubjects();
+        Assert.assertFalse(inboxSubjects.isEmpty(), "Inbox is empty.");
+        String subjectToDelete = inboxSubjects.get(0);
+
+        Logger.info("Deleting email: " + subjectToDelete);
+        mailPage.openEmailBySubject(subjectToDelete);
+        mailPage.deleteOpenedEmail();
+
+        mailPage.goToTrash();
+        Assert.assertTrue(trashPage.isAtTrash(), "Not at Trash page.");
+        Assert.assertTrue(trashPage.isEmailInTrash(subjectToDelete), "Email not found in Trash.");
+
+        trashPage.openEmailBySubjectInTrash(subjectToDelete);
+
+        trashPage.deleteOpenedEmailPermanently();
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException ignored) {}
+
+        boolean stillInTrash = trashPage.isEmailInTrash(subjectToDelete);
+
+        Assert.assertFalse(stillInTrash, "Email still found in Trash after permanent delete.");
+        Logger.info("Email permanently deleted and confirmed removed from Trash.");
+    }
+
     private boolean retry(Check check, int attempts) {
         for (int i = 0; i < attempts; i++) {
             if (check.run()) return true;

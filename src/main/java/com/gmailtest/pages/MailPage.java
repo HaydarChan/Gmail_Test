@@ -13,14 +13,13 @@ public class MailPage extends BasePage {
 
     private final By inboxHeader = By.xpath("//h2[@title='Inbox']");
     private final By trashNavButton = By.cssSelector("a[data-testid='navigation-link:trash']");
-    private final By deleteButton = By.cssSelector("button[data-testid='message-header-expanded:move-to-trash']");
+    private final By deleteButton = By.cssSelector("button[data-testid='toolbar:movetotrash']");
     private final By moreButton = By.cssSelector("button[title='More'][data-shortcut-target='toggle-more-items']");
     private final By inboxNavButton = By.cssSelector("a[data-testid='navigation-link:inbox']");
     private final By bulkDeleteButton = By.cssSelector("button[data-testid='toolbar:movetotrash']");
     private final By emailCheckboxes = By.cssSelector("input[data-testid='item-checkbox']");
     private final By selectAllInboxCheckbox = By.cssSelector("input#idSelectAll[data-testid='toolbar:select-all-checkbox']");
     private final By moveToTrashButton = By.cssSelector("button[data-testid='toolbar:movetotrash']");
-
 
     public boolean isAtInbox() {
         try {
@@ -74,7 +73,7 @@ public class MailPage extends BasePage {
     }
 
     public void deleteOpenedEmail() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.elementToBeClickable(deleteButton));
         click(deleteButton);
     }
@@ -131,5 +130,16 @@ public class MailPage extends BasePage {
     public void attemptDeleteWithoutSelection() {
         Logger.info("Attempting to delete with no selection...");
         click(moveToTrashButton);
+    }
+
+    public boolean isEmailWithSubjectPresent(String subject) {
+        By emailSubject = By.xpath("//span[@data-testid='message-row:subject' and @title='" + subject + "']");
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(emailSubject));
+            return find(emailSubject).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -16,6 +16,10 @@ public class TrashPage extends BasePage {
     private final By selectAllCheckbox = By.cssSelector("input#idSelectAll[data-testid='toolbar:select-all-checkbox']");
     private final By moveToInboxButton = By.cssSelector("button[data-testid='toolbar:movetoinbox']");
     private final By toolbarMoveToInboxButton = By.cssSelector("button[data-testid='toolbar:movetoinbox']");
+    private final By deletePermanentlyButton = By.cssSelector("button[data-testid='toolbar:deletepermanently']");
+    private final By toolbarDeletePermanentlyButton = By.cssSelector("button[data-testid='toolbar:deletepermanently']");
+
+    private final By confirmPermanentDeleteButton = By.cssSelector("button[data-testid='permanent-delete-modal:submit']");
 
     private By emailSubject(String subject) {
         return By.cssSelector("span[data-testid='message-row:subject'][title='" + subject + "']");
@@ -42,11 +46,6 @@ public class TrashPage extends BasePage {
         }
     }
 
-    public void permanentlyDeleteEmail(String subject) {
-        // Implementasi ini butuh context menu atau tombol delete di Trash
-        // Belum ditampilkan di screenshot. Placeholder method.
-    }
-
     public List<WebElement> getAllTrashEmails() {
         return driver.findElements(trashMailItems);
     }
@@ -70,5 +69,23 @@ public class TrashPage extends BasePage {
 
     public void moveOpenedEmailToInboxFromToolbar() {
         click(toolbarMoveToInboxButton);
+    }
+
+    public void selectAllInTrash() {
+        click(selectAllCheckbox);
+        Logger.info("Checkbox 'Select All' in Trash clicked.");
+    }
+
+    public void deleteSelectedPermanently() {
+        click(deletePermanentlyButton);
+        Logger.info("Clicked 'Delete permanently' in Trash toolbar.");
+    }
+
+    public void deleteOpenedEmailPermanently() {
+        Logger.info("Clicking 'Delete permanently' from detail view...");
+        click(toolbarDeletePermanentlyButton);
+
+        Logger.info("Confirming permanent delete...");
+        click(confirmPermanentDeleteButton);
     }
 }

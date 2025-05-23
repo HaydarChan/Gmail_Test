@@ -1,0 +1,3 @@
+[2025-05-23 19:46:30] INFO    - ===== Test: Login to Proton =====
+[2025-05-23 19:46:30] INFO    - Starting login test to Proton Mail
+[2025-05-23 19:46:31] INFO    - Shutting down WebDriver and closing log file...
