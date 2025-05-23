@@ -34,8 +34,13 @@ public class MailPage extends BasePage {
     }
 
     public List<String> getAllInboxEmailSubjects() {
-        By subjectLocator = By.cssSelector("span[data-testid='message-column:subject']");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        By subjectLocator = By.cssSelector("span[data-testid='message-row:subject']");
+
+        if (!isAtInbox()) {
+            throw new IllegalStateException("Not at Inbox page.");
+        }
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(subjectLocator));
 
         return driver.findElements(subjectLocator).stream()
@@ -44,19 +49,10 @@ public class MailPage extends BasePage {
                 .collect(Collectors.toList());
     }
 
-    public boolean isEmailWithSubjectPresent(String subject) {
-        By emailSubject = By.xpath("//span[@data-testid='message-column:subject' and text()='" + subject + "']");
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(emailSubject));
-            return find(emailSubject).isDisplayed();
-        } catch(Exception e) {
-            return false;
-        }
-    }
-
     public void openEmailBySubject(String subject) {
-        By emailSubject = By.xpath("//span[@data-testid='message-column:subject' and text()='" + subject + "']");
+        By emailSubject = By.xpath("//span[@data-testid='message-row:subject' and @title='" + subject + "']");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(emailSubject));
         click(emailSubject);
     }
 

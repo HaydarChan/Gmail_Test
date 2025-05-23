@@ -10,10 +10,22 @@ import java.util.List;
 
 public class TrashPage extends BasePage {
 
+    private final By trashHeader = By.xpath("//h2[@title='Trash']");
     private final By trashMailItems = By.cssSelector("div[data-testid='message-list-item']");
 
     private By emailSubject(String subject) {
         return By.cssSelector("span[data-testid='message-row:subject'][title='" + subject + "']");
+    }
+
+    public boolean isAtTrash() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(trashHeader));
+            WebElement header = find(trashHeader);
+            return header.isDisplayed() && header.getText().equalsIgnoreCase("Trash");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean isEmailInTrash(String subject) {

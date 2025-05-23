@@ -52,11 +52,19 @@ public class GmailDeletionTest extends BaseTest {
         Logger.info("Email deleted, expected to be moved to Trash.");
     }
 
-    @Test(dependsOnMethods = "testDeleteEmail", description = "Verify email appears in Trash")
-    public void testEmailMovedToTrash() {
+    @Test(dependsOnMethods = "testDeleteEmail", description = "Verify that the current page is Trash")
+    public void testAtTrashPage() {
         Logger.info("Navigating to Trash...");
         mailPage.goToTrash();
 
+        boolean atTrash = retry(() -> trashPage.isAtTrash(), 3);
+        Assert.assertTrue(atTrash, "Not currently in Trash page.");
+        Logger.info("Successfully arrived at Trash page.");
+    }
+
+    @Test(dependsOnMethods = "testAtTrashPage", description = "Verify email appears in Trash")
+    public void testEmailMovedToTrash() {
+        Logger.info("Verifying email '" + subject + "' exists in Trash...");
         boolean foundInTrash = retry(() -> trashPage.isEmailInTrash(subject), 3);
         Assert.assertTrue(foundInTrash, "Deleted email was not found in Trash.");
         Logger.info("Email successfully found in Trash.");
