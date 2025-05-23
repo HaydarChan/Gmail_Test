@@ -127,4 +127,9 @@ public class MailPage extends BasePage {
         Logger.info("Clicking 'Move to Trash'...");
         click(moveToTrashButton);
     }
+
+    public void attemptDeleteWithoutSelection() {
+        Logger.info("Attempting to delete with no selection...");
+        click(moveToTrashButton);
+    }
 }

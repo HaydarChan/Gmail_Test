@@ -1,6 +1,8 @@
 package tests;
 
 import com.gmailtest.utils.Logger;
+
+import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -198,6 +200,29 @@ public class GmailDeletionTest extends BaseTest {
 
         Logger.info("All emails successfully restored to Inbox.");
     }
+
+    /* 
+        Test: Verify delete button does not appear when no email is selected 
+    */
+    @Test(dependsOnMethods = "testMoveAllInboxToTrashAndBack", description = "Verify delete button does not appear without selection")
+    public void testDeleteButtonNotPresentWithoutSelection() {
+        Logger.info("===== Test: Toolbar delete button hidden with no selection =====");
+
+        mailPage.goToInbox();
+        Assert.assertTrue(mailPage.isAtInbox(), "Not at Inbox page.");
+
+        // Try to find the delete button without selecting any email
+        boolean deleteButtonExists;
+        try {
+            driver.findElement(By.cssSelector("button[data-testid='toolbar:movetotrash']"));
+            deleteButtonExists = true;
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            deleteButtonExists = false;
+        }
+
+        Assert.assertFalse(deleteButtonExists, "Delete button should not be visible without email selection.");
+        Logger.info("Delete button correctly not visible without selection.");
+}
 
     private boolean retry(Check check, int attempts) {
         for (int i = 0; i < attempts; i++) {
