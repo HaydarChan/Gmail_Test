@@ -222,7 +222,45 @@ public class GmailDeletionTest extends BaseTest {
 
         Assert.assertFalse(deleteButtonExists, "Delete button should not be visible without email selection.");
         Logger.info("Delete button correctly not visible without selection.");
-}
+    }
+
+    /* 
+        Test: Delete one email, open it in Trash, restore via toolbar, verify in Inbox 
+    */
+    @Test(dependsOnMethods = "testDeleteButtonNotPresentWithoutSelection", description = "Restore a deleted email from Trash via toolbar")
+    public void testDeleteAndRestoreEmailFromTrashToolbar() {
+        Logger.info("===== Test: Delete one email and restore from Trash via toolbar =====");
+
+        // Step 0: Delete one email
+        mailPage.goToInbox();
+        Assert.assertTrue(mailPage.isAtInbox(), "Not at Inbox page.");
+
+        List<String> subjects = mailPage.getAllInboxEmailSubjects();
+        Assert.assertFalse(subjects.isEmpty(), "Inbox is empty.");
+        String targetSubject = subjects.get(0);
+        Logger.info("Target email to delete and restore: " + targetSubject);
+
+        mailPage.openEmailBySubject(targetSubject);
+        Assert.assertTrue(mailPage.isEmailOpened(targetSubject), "Email not opened.");
+        mailPage.deleteOpenedEmail();
+
+        // Step 1: Go to Trash
+        mailPage.goToTrash();
+        Assert.assertTrue(trashPage.isAtTrash(), "Not at Trash page.");
+
+        // Step 2: Open the email in Trash
+        trashPage.openEmailBySubjectInTrash(targetSubject);
+
+        // Step 3: Click toolbar restore
+        trashPage.moveOpenedEmailToInboxFromToolbar();
+
+        // Step 4: Verify it's in Inbox
+        mailPage.goToInbox();
+        List<String> inboxSubjects = mailPage.getAllInboxEmailSubjects();
+        Assert.assertTrue(inboxSubjects.contains(targetSubject), "Restored email not found in Inbox.");
+
+        Logger.info("Email successfully restored to Inbox from Trash detail view.");
+    }
 
     private boolean retry(Check check, int attempts) {
         for (int i = 0; i < attempts; i++) {
