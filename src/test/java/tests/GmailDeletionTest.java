@@ -35,6 +35,23 @@ public class GmailDeletionTest extends BaseTest {
         Assert.assertTrue(opened, "Email with subject '" + subject + "' could not be opened.");
     }
 
+    @Test(dependsOnMethods = "testOpenEmailBySubject", description = "Delete the opened email")
+    public void testDeleteEmail() {
+        Logger.info("Deleting the opened email...");
+        mailPage.deleteOpenedEmail();
+        Logger.info("Email deleted, expected to be moved to Trash.");
+    }
+
+    @Test(dependsOnMethods = "testDeleteEmail", description = "Verify email appears in Trash")
+    public void testEmailMovedToTrash() {
+        Logger.info("Navigating to Trash...");
+        mailPage.goToTrash();
+
+        boolean foundInTrash = retry(() -> trashPage.isEmailInTrash(subject), 3);
+        Assert.assertTrue(foundInTrash, "Deleted email was not found in Trash.");
+        Logger.info("Email successfully found in Trash.");
+    }
+
     private boolean retry(Check check, int attempts) {
         for (int i = 0; i < attempts; i++) {
             if (check.run()) return true;

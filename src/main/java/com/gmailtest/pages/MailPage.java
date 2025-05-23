@@ -1,18 +1,18 @@
 package com.gmailtest.pages;
 
+import com.gmailtest.utils.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
-import java.util.List;
 
 public class MailPage extends BasePage {
+
     private final By inboxHeader = By.xpath("//h2[@title='Inbox']");
-    private final By mailItems = By.cssSelector("div[data-testid='message-list-item']");
-    private final By trashNavButton = By.xpath("//span[text()='Trash']/ancestor::button | //a[contains(@href,'/trash')]");
-    private final By deleteButton = By.xpath("//button[@aria-label='Delete']");
+    private final By trashNavButton = By.cssSelector("a[data-testid='navigation-link:trash']");
+    private final By deleteButton = By.cssSelector("button[data-testid='message-header-expanded:move-to-trash']");
+    private final By moreButton = By.cssSelector("button[title='More'][data-shortcut-target='toggle-more-items']");
 
     public boolean isAtInbox() {
         try {
@@ -59,10 +59,25 @@ public class MailPage extends BasePage {
     }
 
     public void deleteOpenedEmail() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(deleteButton));
         click(deleteButton);
     }
 
     public void goToTrash() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        try {
+            WebElement more = wait.until(ExpectedConditions.elementToBeClickable(moreButton));
+            if (more.isDisplayed()) {
+                more.click();
+                Logger.info("Clicked 'More' to expand hidden sidebar items.");
+            }
+        } catch (Exception e) {
+            Logger.warn("'More' button not found or already expanded.");
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(trashNavButton));
         click(trashNavButton);
     }
 }
