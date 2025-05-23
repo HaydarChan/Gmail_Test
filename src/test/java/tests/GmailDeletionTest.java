@@ -5,10 +5,11 @@ import com.gmailtest.utils.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 public class GmailDeletionTest extends BaseTest {
 
-    private final String subject = "test email 5";
-    private final String expectedContent = "te 5";
+    private String subject;
 
     @Test(description = "Verify user can login to Proton successfully")
     public void testLoginToProton() {
@@ -20,14 +21,23 @@ public class GmailDeletionTest extends BaseTest {
 
     @Test(dependsOnMethods = "testLoginToProton", description = "Verify email with specific subject exists in Inbox")
     public void testEmailPresenceInInbox() {
-        Logger.info("Checking presence of email with subject: " + subject);
-        boolean found = retry(() -> mailPage.isEmailWithSubjectPresent(subject), 3);
-        Assert.assertTrue(found, "Email with subject not found.");
+        Logger.info("Checking that there are at least 5 emails in the inbox...");
+        List<String> subjects = mailPage.getAllInboxEmailSubjects();
+        Assert.assertTrue(subjects.size() >= 5, "Expected at least 5 emails, but found: " + subjects.size());
+        Logger.info("Found " + subjects.size() + " emails in the inbox.");
     }
 
-    @Test(dependsOnMethods = "testEmailPresenceInInbox", description = "Verify email with specific subject can be opened")
+    @Test(dependsOnMethods = "testEmailPresenceInInbox", description = "Set target email subject from top of inbox")
+    public void testSetEmailSubjectFromInbox() {
+        Logger.info("Grabbing first available email subject from inbox...");
+        List<String> subjects = mailPage.getAllInboxEmailSubjects();
+        Assert.assertFalse(subjects.isEmpty(), "No email subjects found in inbox.");
+        subject = subjects.get(0);
+        Logger.info("Selected email subject: " + subject);
+    }
+
+    @Test(dependsOnMethods = "testSetEmailSubjectFromInbox", description = "Verify email with specific subject can be opened")
     public void testOpenEmailBySubject() {
-        String subject = "test email 5";
         Logger.info("Opening email with subject: " + subject);
         mailPage.openEmailBySubject(subject);
 

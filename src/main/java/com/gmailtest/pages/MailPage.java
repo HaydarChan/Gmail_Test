@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MailPage extends BasePage {
 
@@ -29,6 +31,17 @@ public class MailPage extends BasePage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public List<String> getAllInboxEmailSubjects() {
+        By subjectLocator = By.cssSelector("span[data-testid='message-column:subject']");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(subjectLocator));
+
+        return driver.findElements(subjectLocator).stream()
+                .map(element -> element.getText().trim())
+                .filter(text -> !text.isEmpty())
+                .collect(Collectors.toList());
     }
 
     public boolean isEmailWithSubjectPresent(String subject) {
