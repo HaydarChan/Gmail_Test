@@ -1,4 +1,4 @@
-package com.gmailtest.gmailtests;
+package com.gmailtest.pages;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

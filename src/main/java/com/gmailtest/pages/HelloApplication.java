@@ -1,4 +1,4 @@
-package com.gmailtest.gmailtests;
+package com.gmailtest.pages;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
