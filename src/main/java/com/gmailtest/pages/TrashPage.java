@@ -1,5 +1,6 @@
 package com.gmailtest.pages;
 
+import com.gmailtest.utils.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,6 +13,10 @@ public class TrashPage extends BasePage {
 
     private final By trashHeader = By.xpath("//h2[@title='Trash']");
     private final By trashMailItems = By.cssSelector("div[data-testid='message-list-item']");
+    private final By selectAllCheckbox = By.cssSelector("input#idSelectAll[data-testid='toolbar:select-all-checkbox']");
+    private final By moveToInboxButton = By.cssSelector("button[data-testid='toolbar:movetoinbox']");
+
+
 
     private By emailSubject(String subject) {
         return By.cssSelector("span[data-testid='message-row:subject'][title='" + subject + "']");
@@ -46,4 +51,14 @@ public class TrashPage extends BasePage {
     public List<WebElement> getAllTrashEmails() {
         return driver.findElements(trashMailItems);
     }
+
+    public void moveAllTrashEmailsToInbox() {
+        Logger.info("Selecting all emails in Trash...");
+        click(selectAllCheckbox);
+
+        Logger.info("Clicking 'Move to Inbox'...");
+        click(moveToInboxButton);
+    }
+
+
 }

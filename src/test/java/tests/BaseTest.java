@@ -29,7 +29,6 @@ public class BaseTest {
         mailPage = new MailPage();
         trashPage = new TrashPage();
         System.out.println("Working dir: " + System.getProperty("user.dir"));
-
     }
 
     @AfterClass
