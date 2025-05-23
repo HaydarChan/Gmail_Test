@@ -12,8 +12,6 @@ mvn clean test
 
 This will compile the tests and execute them using TestNG.
 
----
-
 ## 🎥 Test Run Video
 
 🔗 [Google Drive - Test Execution Video](https://drive.google.com/drive/u/0/folders/1fab2k6AbTr2kfbbWMQE6U39OPlgVbNR1)
